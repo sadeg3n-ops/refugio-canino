@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Button } from './components/ui/button';
 import { Slider } from './components/ui/slider';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './components/ui/accordion';
 import heroCoverUrl from './assets/hero-cover.png?url';
 
 /**
@@ -698,6 +699,86 @@ const ImpactCalculator = () => {
   );
 };
 
+const FaqSection = () => {
+  const faqs = [
+    {
+      question: '¿Y si tengo muy poco tiempo para ayudar, merece la pena?',
+      answer: 'Sí. No todo es adoptar. Un paseo, una acogida corta, una donación puntual o unas horas de voluntariado pueden cambiarle el día y la vida a un perro.',
+    },
+    {
+      question: 'Nunca he adoptado ni acogido, ¿encajaré aquí?',
+      answer: 'Sí. Te acompañamos paso a paso. No necesitas experiencia previa, solo ganas de ayudar de una forma realista para ti.',
+    },
+    {
+      question: '¿Es una opción asequible a largo plazo?',
+      answer: 'Sí. Hay muchas formas de colaborar según tu momento. Desde una pequeña aportación hasta tiempo o acogida temporal, todo suma de verdad.',
+    },
+    {
+      question: 'Tengo miedo de no saber manejar un caso complicado, ¿qué pasa entonces?',
+      answer: 'No te dejamos solo. Valoramos contigo el caso, te orientamos y buscamos la forma de ayuda que mejor encaje con tu situación y con la del perro.',
+    },
+    {
+      question: '¿En cuánto tiempo se nota el impacto de mi ayuda?',
+      answer: 'Muchas veces, al momento. Una vacuna, una revisión veterinaria o una tarde de paseo pueden marcar una diferencia real ese mismo día.',
+    },
+    {
+      question: 'Me implico mucho emocionalmente, ¿y si se me hace cuesta arriba?',
+      answer: 'Es normal. Aquí trabajamos con corazón, pero también con acompañamiento. Ayudar no va de hacerlo perfecto, va de estar y sostener cuando hace falta.',
+    },
+  ];
+
+  return (
+    <section className="w-full bg-[#fafaf9] py-20 md:py-24 px-4 sm:px-6 lg:px-8">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+        className="max-w-5xl mx-auto"
+      >
+        <motion.div variants={fadeUp} className="text-center max-w-3xl mx-auto mb-12">
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#E2725B]/25 bg-[#E2725B]/[0.07] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.22em] text-[#c45a47]">
+            Preguntas frecuentes
+          </span>
+          <h2 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-zinc-900">
+            Lo que todos nos preguntan antes de dar el paso
+          </h2>
+          <p className="mt-4 text-base md:text-lg text-stone-600 text-inter font-medium leading-relaxed">
+            Sabemos que empezar cuesta. Estas son las dudas que más resolvemos en la primera conversación.
+          </p>
+        </motion.div>
+
+        <motion.div variants={fadeUp} className="rounded-[2rem] border border-stone-200 bg-white p-5 sm:p-6 shadow-[0_12px_40px_rgba(0,0,0,0.04)]">
+          <Accordion type="single" collapsible className="w-full">
+            {faqs.map((faq) => (
+              <AccordionItem key={faq.question} value={faq.question} className="border-stone-200">
+                <AccordionTrigger className="py-5 text-left text-base sm:text-lg font-bold text-zinc-900 hover:no-underline">
+                  {faq.question}
+                </AccordionTrigger>
+                <AccordionContent className="pb-5 text-sm sm:text-base text-stone-600 text-inter leading-relaxed">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+
+          <div className="mt-8 flex justify-center">
+            <a
+              href="https://wa.me/34600000000"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-3 rounded-full bg-[#E2725B] px-7 py-4 text-base font-bold text-white shadow-[0_12px_30px_rgba(226,114,91,0.28)] transition-all hover:bg-[#d1614b]"
+            >
+              <Phone size={18} />
+              Hablar con el equipo por WhatsApp
+            </a>
+          </div>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+};
+
 const Footer = () => {
   return (
     <footer className="w-full bg-[#131110] pt-24 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-stone-400">
@@ -802,6 +883,7 @@ export default function App() {
       <ResidentCarousel />
       <ResidentsToImpactDivider />
       <ImpactCalculator />
+      <FaqSection />
       <Footer />
 
       {/* Sticky Mobile Bar - visible en viewport movil pequeño */}

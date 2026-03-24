@@ -1,16 +1,25 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Heart, HandHeart, PawPrint, Home, 
   Gift, Coffee, ArrowRight, Activity, Bone, Award, Shield,
   Users, Compass, ChevronLeft, ChevronRight,
-  Instagram, Facebook, Twitter, MapPin, Mail, Phone
+  Instagram, Facebook, Twitter, MapPin, Mail, Phone,
+  Calendar, CheckCircle2, Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Button } from './components/ui/button';
 import { Slider } from './components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './components/ui/accordion';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from './components/ui/dialog';
+import { cn } from '@/lib/utils';
 import heroCoverUrl from './assets/hero-cover.png?url';
 
 /**
@@ -156,19 +165,25 @@ const Hero = () => {
   const opacity = useTransform(scrollY, [150, 600], [1, 0]);
 
   return (
-    <section className="relative isolate w-full h-[78vh] min-h-[520px] max-h-[900px] flex items-stretch overflow-hidden bg-stone-800">
-      <motion.div
-        style={{
-          y: backgroundY,
-          backgroundImage: `url(${heroCoverUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'right center',
-          backgroundRepeat: 'no-repeat',
-        }}
-        className="absolute inset-0 z-0 min-h-full w-full"
-      />
+    <section className="relative isolate w-full h-[78vh] min-h-[520px] max-h-[900px] flex items-stretch overflow-hidden bg-stone-900">
+      {/* Imagen en <img>: más fiable que background + transform en algunos navegadores */}
+      <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 overflow-hidden">
+        <img
+          src={heroCoverUrl}
+          alt=""
+          width={1920}
+          height={1080}
+          fetchPriority="high"
+          decoding="async"
+          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-right"
+          onError={(e) => {
+            const el = e.currentTarget;
+            if (!el.src.endsWith('/hero-cover.png')) el.src = '/hero-cover.png';
+          }}
+        />
+      </motion.div>
       <div className="absolute inset-0 z-[1] bg-gradient-to-r from-stone-950/92 via-stone-900/65 via-45% to-transparent sm:via-50%" />
-      <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#fafaf9]/20 via-transparent to-stone-950/20 pointer-events-none" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#fafaf9]/12 via-transparent to-stone-950/25" />
 
       <motion.div 
         style={{ opacity }}
@@ -259,7 +274,180 @@ const Hero = () => {
   );
 };
 
+const VOLUNTEER_WEEKDAYS = [
+  { id: 1, short: 'Lun', full: 'Lunes' },
+  { id: 2, short: 'Mar', full: 'Martes' },
+  { id: 3, short: 'Mié', full: 'Miércoles' },
+  { id: 4, short: 'Jue', full: 'Jueves' },
+  { id: 5, short: 'Vie', full: 'Viernes' },
+  { id: 6, short: 'Sáb', full: 'Sábado' },
+  { id: 7, short: 'Dom', full: 'Domingo' },
+] as const;
+
+const VOLUNTEER_TASKS = [
+  { id: 'paseos', label: 'Paseos y ejercicio' },
+  { id: 'limpieza', label: 'Limpieza de boxes y zonas comunes' },
+  { id: 'comida', label: 'Comida, agua y medicación básica' },
+  { id: 'compania', label: 'Compañía y socialización' },
+] as const;
+
+type VolunteerBookingDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
+
+const VolunteerBookingDialog = ({ open, onOpenChange }: VolunteerBookingDialogProps) => {
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [tasks, setTasks] = useState<string[]>(['paseos', 'limpieza']);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setSelectedDay(null);
+      setTasks(['paseos', 'limpieza']);
+      setSubmitted(false);
+    }
+  }, [open]);
+
+  const toggleTask = (id: string) => {
+    setTasks((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
+  };
+
+  const handleConfirm = () => {
+    if (selectedDay == null) return;
+    setSubmitted(true);
+    confetti({
+      particleCount: 55,
+      spread: 62,
+      origin: { y: 0.65 },
+      colors: ['#E2725B', '#FFB347', '#fafaf9'],
+    });
+  };
+
+  const dayLabel = selectedDay != null ? VOLUNTEER_WEEKDAYS.find((d) => d.id === selectedDay)?.full : '';
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="flex max-h-[min(88vh,620px)] max-w-[min(100%,26rem)] flex-col gap-0 overflow-hidden rounded-2xl border-stone-200 bg-[#fafaf9] p-0 shadow-2xl sm:max-w-md z-[100]">
+        {!submitted ? (
+          <>
+            <div className="shrink-0 bg-gradient-to-br from-[#E2725B] to-[#d65a4a] px-6 pb-5 pt-6 text-white">
+              <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-widest">
+                <Sparkles className="h-3.5 w-3.5" aria-hidden />
+                Demo de reserva
+              </div>
+              <DialogHeader className="space-y-1.5 text-left text-white">
+                <DialogTitle className="text-2xl font-black tracking-tight text-white sm:text-[1.65rem]">
+                  Elige tu día en el refugio
+                </DialogTitle>
+                <DialogDescription className="text-sm leading-snug text-white/85 text-inter">
+                  Selecciona un día de la semana y las tareas que te encajan. En la web real esto se enviaría al equipo para confirmarte plaza.
+                </DialogDescription>
+              </DialogHeader>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-4">
+              <div className="space-y-4">
+                <div>
+                  <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.14em] text-stone-500">
+                    <Calendar className="h-4 w-4 text-[#E2725B]" aria-hidden />
+                    Día de la semana
+                  </p>
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                    {VOLUNTEER_WEEKDAYS.map((d) => (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() => setSelectedDay(d.id)}
+                        title={d.full}
+                        className={cn(
+                          'flex min-h-[2.75rem] flex-col items-center justify-center rounded-xl border px-0.5 py-1.5 text-[10px] font-bold transition-all sm:min-h-0 sm:py-2 sm:text-xs',
+                          selectedDay === d.id
+                            ? 'border-[#E2725B] bg-[#E2725B] text-white shadow-md shadow-[#E2725B]/25'
+                            : 'border-stone-200 bg-white text-stone-600 hover:border-[#E2725B]/40 hover:bg-orange-50/80'
+                        )}
+                      >
+                        <span className="leading-tight">{d.short}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-stone-500">¿En qué quieres ayudar?</p>
+                  <div className="flex flex-col gap-1.5">
+                    {VOLUNTEER_TASKS.map((t) => (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => toggleTask(t.id)}
+                        className={cn(
+                          'flex w-full items-center gap-3 rounded-xl border px-3 py-2 text-left text-sm font-medium transition-all text-inter',
+                          tasks.includes(t.id)
+                            ? 'border-[#E2725B]/50 bg-[#E2725B]/[0.08] text-zinc-900'
+                            : 'border-stone-200 bg-white text-stone-600 hover:border-stone-300'
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 text-[10px]',
+                            tasks.includes(t.id)
+                              ? 'border-[#E2725B] bg-[#E2725B] text-white'
+                              : 'border-stone-300 bg-white'
+                          )}
+                        >
+                          {tasks.includes(t.id) ? '✓' : ''}
+                        </span>
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="shrink-0 border-t border-stone-200/80 bg-stone-50/90 px-6 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 max-sm:pb-24">
+              <p className="mb-2.5 text-center text-[10px] leading-tight text-stone-400 text-inter">
+                Simulación de reserva — en producción el refugio confirmaría tu plaza.
+              </p>
+              <Button
+                type="button"
+                disabled={selectedDay == null || tasks.length === 0}
+                onClick={handleConfirm}
+                className="w-full rounded-xl bg-[#E2725B] py-5 text-base font-bold text-white hover:bg-[#c95440] disabled:opacity-50"
+              >
+                Confirmar reserva (demo)
+              </Button>
+            </div>
+          </>
+        ) : (
+          <div className="px-6 py-10 text-center">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <CheckCircle2 className="h-9 w-9" strokeWidth={2} />
+            </div>
+            <h3 className="text-xl font-black text-zinc-900">¡Listo, {dayLabel}!</h3>
+            <p className="mt-3 text-sm leading-relaxed text-stone-600 text-inter">
+              Hemos registrado tu preferencia para el <strong className="text-zinc-800">{dayLabel}</strong> con las tareas
+              seleccionadas. En producción recibirías un correo o WhatsApp de confirmación del refugio.
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              className="mt-8 w-full rounded-xl border-stone-200 py-5 font-bold"
+              onClick={() => onOpenChange(false)}
+            >
+              Cerrar
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const DecisionBridge = () => {
+  const [volunteerDialogOpen, setVolunteerDialogOpen] = useState(false);
+
   return (
     <section id="decision-bridge" className="w-full pt-10 pb-8 sm:pt-14 sm:pb-10 md:pt-16 md:pb-12 px-4 sm:px-6 lg:px-8 relative z-10 bg-[#fafaf9]">
       <motion.div 
@@ -353,13 +541,18 @@ const DecisionBridge = () => {
                <span className="text-[#FFB347] font-bold tracking-wider uppercase text-sm mb-3 flex items-center gap-2"><Users size={18}/> Pasa a la Acción</span>
                <h3 className="text-3xl font-bold mb-4 leading-tight">Tu tiempo calienta el alma fría.</h3>
                <p className="text-stone-300 text-inter mb-8 text-lg font-medium">Ven un fin de semana a ayudar a pasear perros o a darle compañía visual a los recién rescatados. No requiere experiencia previa.</p>
-               <Button className="w-fit bg-white hover:bg-stone-200 text-zinc-900 rounded-full px-8 py-6 text-base transition-all font-bold shadow-xl">
+               <Button
+                  type="button"
+                  onClick={() => setVolunteerDialogOpen(true)}
+                  className="w-fit bg-white hover:bg-stone-200 text-zinc-900 rounded-full px-8 py-6 text-base transition-all font-bold shadow-xl"
+                >
                   Apuntarme de voluntario <ArrowRight size={18} className="ml-2"/>
                </Button>
             </div>
           </motion.div>
         </div>
       </motion.div>
+      <VolunteerBookingDialog open={volunteerDialogOpen} onOpenChange={setVolunteerDialogOpen} />
     </section>
   );
 };
@@ -752,27 +945,17 @@ const FaqSection = () => {
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq) => (
               <AccordionItem key={faq.question} value={faq.question} className="border-stone-200">
-                <AccordionTrigger className="py-5 text-left text-base sm:text-lg font-bold text-zinc-900 hover:no-underline">
-                  {faq.question}
+                <AccordionTrigger className="grid grid-cols-[1fr_auto] items-center gap-3 py-5 hover:no-underline sm:gap-4 [&[data-state=open]>svg]:rotate-180">
+                  <span className="w-full text-balance text-center text-base font-bold text-zinc-900 sm:text-lg">
+                    {faq.question}
+                  </span>
                 </AccordionTrigger>
-                <AccordionContent className="pb-5 text-sm sm:text-base text-stone-600 text-inter leading-relaxed">
+                <AccordionContent className="pb-5 text-center text-sm text-stone-600 text-inter leading-relaxed sm:text-base">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
-
-          <div className="mt-8 flex justify-center">
-            <a
-              href="https://wa.me/34600000000"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-3 rounded-full bg-[#E2725B] px-7 py-4 text-base font-bold text-white shadow-[0_12px_30px_rgba(226,114,91,0.28)] transition-all hover:bg-[#d1614b]"
-            >
-              <Phone size={18} />
-              Hablar con el equipo por WhatsApp
-            </a>
-          </div>
         </motion.div>
       </motion.div>
     </section>

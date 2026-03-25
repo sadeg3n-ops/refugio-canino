@@ -178,15 +178,15 @@ const Hero = () => {
           height={1080}
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-[100%_center] sm:object-right"
+          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-[130%_center] sm:object-right"
           onError={(e) => {
             const el = e.currentTarget;
             if (!el.src.endsWith('/hero-cover.png')) el.src = '/hero-cover.png';
           }}
         />
       </motion.div>
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-stone-950/95 via-stone-900/72 via-45% to-transparent sm:via-50%" />
-      <div className="absolute inset-0 z-[1] bg-black/38 sm:bg-black/24" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-stone-950/90 via-stone-900/65 via-45% to-transparent sm:via-50%" />
+      <div className="absolute inset-0 z-[1] bg-black/30 sm:bg-black/24" />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#fafaf9]/12 via-transparent to-stone-950/25" />
 
       <motion.div 

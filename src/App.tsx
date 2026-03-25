@@ -473,15 +473,15 @@ const DecisionBridge = () => {
           </motion.p>
         </div>
 
-        {/* Bento Grid layout with stagger animation */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 auto-rows-[250px] md:auto-rows-[280px]">
+        {/* Bento layout: en móvil apilado con separación real; en md grid */}
+        <div className="flex flex-col space-y-6 sm:space-y-7 md:grid md:grid-cols-3 md:gap-6 md:auto-rows-[280px] md:space-y-0">
           
           {/* Adopción - Large block */}
           <motion.div 
             variants={fadeUp}
             whileHover={{ y: -5, scale: 1.01 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="md:col-span-2 rounded-[2rem] sm:rounded-[2.5rem] bg-stone-100/50 backdrop-blur-md border border-stone-200 p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-8 md:gap-10 relative overflow-hidden group cursor-pointer hover:border-orange-300"
+            className="md:col-span-2 rounded-[2rem] sm:rounded-[2.5rem] bg-stone-100/50 backdrop-blur-md border border-stone-200 p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-8 md:gap-10 relative overflow-visible sm:overflow-hidden group cursor-pointer hover:border-orange-300"
           >
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-100/60 rounded-full blur-[80px] -mr-20 -mt-20 opacity-50 pointer-events-none transition-all group-hover:opacity-100" />
             <div className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 organic-blob border-4 border-white shadow-xl relative z-10">

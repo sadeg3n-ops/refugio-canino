@@ -20,7 +20,8 @@ import {
   DialogTitle,
 } from './components/ui/dialog';
 import { cn } from '@/lib/utils';
-import heroCoverUrl from './assets/hero-cover.png?url';
+import heroCover from './assets/hero-cover.png';
+import heroCoverMobile from './assets/hero-cover-mobile.jpg';
 
 /**
  * UTILITIES
@@ -67,8 +68,8 @@ const staggerContainer: any = {
 const AnimatedBackground = () => {
   return (
     <>
-      <div className="noise-bg pointer-events-none" />
-      <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden opacity-30">
+      <div className="noise-bg pointer-events-none hidden sm:block" />
+      <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden opacity-30 hidden sm:block">
         <motion.div 
           animate={{ y: [0, -20, 0], rotate: [0, 5, -5, 0] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
@@ -169,13 +170,15 @@ const Hero = () => {
       {/* Imagen en <img>: más fiable que background + transform en algunos navegadores */}
       <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 overflow-hidden">
         <img
-          src={heroCoverUrl}
+          src={heroCover}
+          srcSet={`${heroCoverMobile} 900w, ${heroCover} 1200w`}
+          sizes="(max-width: 640px) 100vw, 1200px"
           alt=""
           width={1920}
           height={1080}
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-[112%_center] sm:object-right"
+          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-[100%_center] sm:object-right"
           onError={(e) => {
             const el = e.currentTarget;
             if (!el.src.endsWith('/hero-cover.png')) el.src = '/hero-cover.png';

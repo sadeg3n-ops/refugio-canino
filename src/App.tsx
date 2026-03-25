@@ -165,7 +165,7 @@ const Hero = () => {
   const opacity = useTransform(scrollY, [150, 600], [1, 0]);
 
   return (
-    <section className="relative isolate w-full h-[78vh] min-h-[520px] max-h-[900px] flex items-stretch overflow-hidden bg-stone-900">
+    <section className="relative isolate w-full h-[74vh] min-h-[460px] sm:h-[78vh] sm:min-h-[520px] max-h-[900px] flex items-stretch overflow-hidden bg-stone-900">
       {/* Imagen en <img>: más fiable que background + transform en algunos navegadores */}
       <motion.div style={{ y: backgroundY }} className="absolute inset-0 z-0 overflow-hidden">
         <img
@@ -175,14 +175,15 @@ const Hero = () => {
           height={1080}
           fetchPriority="high"
           decoding="async"
-          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-right"
+          className="absolute inset-0 h-full w-full min-h-full min-w-full object-cover object-[112%_center] sm:object-right"
           onError={(e) => {
             const el = e.currentTarget;
             if (!el.src.endsWith('/hero-cover.png')) el.src = '/hero-cover.png';
           }}
         />
       </motion.div>
-      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-stone-950/92 via-stone-900/65 via-45% to-transparent sm:via-50%" />
+      <div className="absolute inset-0 z-[1] bg-gradient-to-r from-stone-950/95 via-stone-900/72 via-45% to-transparent sm:via-50%" />
+      <div className="absolute inset-0 z-[1] bg-black/38 sm:bg-black/24" />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-[#fafaf9]/12 via-transparent to-stone-950/25" />
 
       <motion.div 
@@ -449,7 +450,7 @@ const DecisionBridge = () => {
   const [volunteerDialogOpen, setVolunteerDialogOpen] = useState(false);
 
   return (
-    <section id="decision-bridge" className="w-full pt-10 pb-8 sm:pt-14 sm:pb-10 md:pt-16 md:pb-12 px-4 sm:px-6 lg:px-8 relative z-10 bg-[#fafaf9]">
+    <section id="decision-bridge" className="w-full pt-8 pb-6 sm:pt-12 sm:pb-10 md:pt-16 md:pb-12 px-4 sm:px-6 lg:px-8 relative z-10 bg-[#fafaf9]">
       <motion.div 
         initial="hidden"
         whileInView="visible"
@@ -457,37 +458,37 @@ const DecisionBridge = () => {
         variants={staggerContainer}
         className="max-w-6xl mx-auto relative cursor-default"
       >
-        <div className="text-center mb-16">
-          <motion.h2 variants={fadeUp} className="text-4xl md:text-5xl lg:text-6xl font-black text-zinc-800 mb-6 drop-shadow-sm tracking-tight">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <motion.h2 variants={fadeUp} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-zinc-800 mb-4 sm:mb-6 drop-shadow-sm tracking-tight">
             Descubre tu camino para  <br className="hidden sm:block"/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#E2725B] to-[#FF8C6B]">
                dejar una huella imborrable
             </span>
           </motion.h2>
-          <motion.p variants={fadeUp} className="text-stone-500 text-lg md:text-xl max-w-2xl mx-auto text-inter font-medium leading-relaxed">
+          <motion.p variants={fadeUp} className="text-stone-500 text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-inter font-medium leading-relaxed">
             Muchas personas creen que si no pueden adoptar, no pueden ayudar. Esa es nuestra mayor mentira.
           </motion.p>
         </div>
 
         {/* Bento Grid layout with stagger animation */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[280px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 auto-rows-[250px] md:auto-rows-[280px]">
           
           {/* Adopción - Large block */}
           <motion.div 
             variants={fadeUp}
             whileHover={{ y: -5, scale: 1.01 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="md:col-span-2 rounded-[2.5rem] bg-stone-100/50 backdrop-blur-md border border-stone-200 p-10 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden group cursor-pointer hover:border-orange-300"
+            className="md:col-span-2 rounded-[2rem] sm:rounded-[2.5rem] bg-stone-100/50 backdrop-blur-md border border-stone-200 p-5 sm:p-8 md:p-10 flex flex-col md:flex-row items-center gap-5 sm:gap-8 md:gap-10 relative overflow-hidden group cursor-pointer hover:border-orange-300"
           >
             <div className="absolute top-0 right-0 w-80 h-80 bg-orange-100/60 rounded-full blur-[80px] -mr-20 -mt-20 opacity-50 pointer-events-none transition-all group-hover:opacity-100" />
-            <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full overflow-hidden shrink-0 organic-blob border-4 border-white shadow-xl relative z-10">
+            <div className="w-36 h-36 sm:w-48 sm:h-48 md:w-56 md:h-56 rounded-full overflow-hidden shrink-0 organic-blob border-4 border-white shadow-xl relative z-10">
                <img src="https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"/>
             </div>
             <div className="flex flex-col h-full justify-center z-10 relative">
                <span className="text-[#E2725B] font-bold tracking-wider uppercase text-sm mb-3 flex items-center gap-2 font-inter"><Home size={18}/> Adopta una vida</span>
-               <h3 className="text-3xl font-bold text-zinc-900 mb-4 leading-tight">Dale el hogar que nunca tuvo.</h3>
-               <p className="text-stone-600/90 text-inter mb-8 text-lg font-medium">Llevarte un perro a casa es salvar dos vidas: la suya y la del perrito que ocupará su lugar en el refugio.</p>
-               <Button className="w-fit bg-zinc-900 hover:bg-zinc-800 text-white rounded-full px-8 py-6 text-base font-bold transition-all shadow-xl group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
+               <h3 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-3 sm:mb-4 leading-tight">Dale el hogar que nunca tuvo.</h3>
+               <p className="text-stone-600/90 text-inter mb-6 sm:mb-8 text-base sm:text-lg font-medium">Llevarte un perro a casa es salvar dos vidas: la suya y la del perrito que ocupará su lugar en el refugio.</p>
+               <Button className="w-full sm:w-fit bg-zinc-900 hover:bg-zinc-800 text-white rounded-full px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base font-bold transition-all shadow-xl group-hover:shadow-[0_10px_30px_rgba(0,0,0,0.15)]">
                   Ver perritos en Adopción <ArrowRight size={18} className="ml-2"/>
                </Button>
             </div>
@@ -499,7 +500,7 @@ const DecisionBridge = () => {
             whileHover={{ y: -5, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
             onClick={() => document.getElementById('impact-calculator')?.scrollIntoView({ behavior: 'smooth' })}
-            className="rounded-[2.5rem] bg-gradient-to-br from-[#E2725B] to-[#FF8C6B] p-10 flex flex-col relative overflow-hidden group cursor-pointer text-white shadow-xl shadow-orange-500/20"
+            className="rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#E2725B] to-[#FF8C6B] p-6 sm:p-10 flex flex-col relative overflow-hidden group cursor-pointer text-white shadow-xl shadow-orange-500/20"
           >
             <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-700 pointer-events-none">
                <Heart size={180} className="fill-current" />
@@ -517,7 +518,7 @@ const DecisionBridge = () => {
             variants={fadeUp}
             whileHover={{ y: -5, scale: 1.02 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="md:col-span-1 rounded-[2.5rem] bg-white border border-stone-200 p-10 flex flex-col group cursor-pointer hover:border-[#E2725B] transition-colors shadow-sm"
+            className="md:col-span-1 rounded-[2rem] sm:rounded-[2.5rem] bg-white border border-stone-200 p-6 sm:p-10 flex flex-col group cursor-pointer hover:border-[#E2725B] transition-colors shadow-sm"
           >
             <div className="w-14 h-14 bg-rose-100 text-rose-500 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-rose-500 group-hover:text-white transition-colors duration-300">
                <HandHeart size={28}/>
@@ -534,17 +535,17 @@ const DecisionBridge = () => {
             variants={fadeUp}
             whileHover={{ y: -5, scale: 1.01 }}
             transition={{ type: "spring", stiffness: 400, damping: 20 }}
-            className="md:col-span-2 rounded-[2.5rem] bg-zinc-900 text-white p-10 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden group cursor-pointer"
+            className="md:col-span-2 rounded-[2rem] sm:rounded-[2.5rem] bg-zinc-900 text-white p-6 sm:p-10 flex flex-col md:flex-row items-center gap-6 sm:gap-10 relative overflow-hidden group cursor-pointer"
           >
              <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/545063/pexels-photo-545063.jpeg?auto=compress&cs=tinysrgb&w=800&fit=crop')] opacity-[0.15] mix-blend-luminosity group-hover:opacity-[0.25] transition-opacity duration-500" />
              <div className="flex flex-col h-full justify-center z-10 w-full md:w-2/3">
                <span className="text-[#FFB347] font-bold tracking-wider uppercase text-sm mb-3 flex items-center gap-2"><Users size={18}/> Pasa a la Acción</span>
-               <h3 className="text-3xl font-bold mb-4 leading-tight">Tu tiempo calienta el alma fría.</h3>
-               <p className="text-stone-300 text-inter mb-8 text-lg font-medium">Ven un fin de semana a ayudar a pasear perros o a darle compañía visual a los recién rescatados. No requiere experiencia previa.</p>
+               <h3 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 leading-tight">Tu tiempo calienta el alma fría.</h3>
+               <p className="text-stone-300 text-inter mb-6 sm:mb-8 text-base sm:text-lg font-medium">Ven un fin de semana a ayudar a pasear perros o a darle compañía visual a los recién rescatados. No requiere experiencia previa.</p>
                <Button
                   type="button"
                   onClick={() => setVolunteerDialogOpen(true)}
-                  className="w-fit bg-white hover:bg-stone-200 text-zinc-900 rounded-full px-8 py-6 text-base transition-all font-bold shadow-xl"
+                  className="w-full sm:w-fit bg-white hover:bg-stone-200 text-zinc-900 rounded-full px-6 sm:px-8 py-5 sm:py-6 text-sm sm:text-base transition-all font-bold shadow-xl"
                 >
                   Apuntarme de voluntario <ArrowRight size={18} className="ml-2"/>
                </Button>
@@ -964,7 +965,7 @@ const FaqSection = () => {
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-[#131110] pt-24 pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-stone-400">
+    <footer className="w-full bg-[#131110] pt-20 sm:pt-24 pb-28 sm:pb-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden text-stone-400">
       <div className="absolute top-0 right-0 translate-x-1/3 -translate-y-1/3 w-[800px] h-[800px] bg-gradient-radial from-[#E2725B]/10 to-transparent rounded-full pointer-events-none blur-3xl" />
       <div className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 w-[600px] h-[600px] bg-gradient-radial from-[#FFB347]/5 to-transparent rounded-full pointer-events-none blur-3xl" />
 
@@ -975,7 +976,7 @@ const Footer = () => {
          variants={staggerContainer}
          className="max-w-6xl mx-auto relative z-10"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 pb-12 sm:pb-16">
           {/* Col 1 */}
           <motion.div variants={fadeUp} className="flex flex-col space-y-6 lg:col-span-1">
              <div className="flex items-center gap-3">
@@ -1056,7 +1057,7 @@ const Footer = () => {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-[#fafaf9] text-zinc-900 font-sans antialiased selection:bg-[#E2725B]/20 selection:text-[#E2725B] relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#fafaf9] text-zinc-900 font-sans antialiased selection:bg-[#E2725B]/20 selection:text-[#E2725B] relative overflow-x-hidden pb-28 sm:pb-0">
       <AnimatedBackground />
       <LoveWall />
       <Header />
